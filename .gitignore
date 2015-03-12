@@ -1,0 +1,8 @@
+#mac things
+.DS_Store
+
+#built things
+.sass-cache
+node_modules
+tmp
+tests
