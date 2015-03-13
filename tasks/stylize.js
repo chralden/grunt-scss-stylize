@@ -1,6 +1,6 @@
 /*
- * 
- * 
+ * grunt-sass-stylize
+ * https://github.com/chralden/grunt-sass-stylize
  *
  * Copyright (c) 2014 Chris Alden, contributors
  * Licensed under the MIT license.
@@ -21,7 +21,8 @@ module.exports = function(grunt) {
     grunt.registerMultiTask('sassStylize', 'Compile sass files to conform to RECESS styleguide.', function() {
         
         var options = this.options({
-            tabSize: 4
+            tabSize: 4,
+            extraLine: false
         });
 
         var cb = this.async();
@@ -41,7 +42,7 @@ module.exports = function(grunt) {
                 return;
             }
 
-            //Check if ruby is installed
+            //Check if sass is installed
             try {
               which.sync('sass');
             } catch (err) {
@@ -51,11 +52,14 @@ module.exports = function(grunt) {
             //Use sass process to check that file is valid 
             var cp = spawn('sass', ['-c', src], {stdio: 'inherit'});
 
+            //Check for process error
             cp.on('error', function (err) {
               grunt.warn(err);
             });
 
+
             cp.on('close', function (code) { 
+                //If sass check fails, show error
                 if (code > 0) {
                   return grunt.warn('Sass validation check failed with error code ' + code);
                 }
@@ -65,6 +69,8 @@ module.exports = function(grunt) {
                 } catch(e) {
                     grunt.log.warn(e);
                 }
+
+                next();
                 
             });
 

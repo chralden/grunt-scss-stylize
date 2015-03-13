@@ -4,5 +4,5 @@
 #built things
 .sass-cache
 node_modules
-tmp
+stylized
 tests

@@ -1,12 +1,19 @@
 /*
- * 
- * 
+ * grunt-sass-stylize
+ * https://github.com/chralden/grunt-sass-stylize
  *
  * Copyright (c) 2014 Chris Alden, contributors
  * Licensed under the MIT license.
  */
 
+
 'use strict';
+
+/*
+ * Naive sass parser
+ * Converts sass string to JSON object
+ * Assumes file has already been checked as valid with sass binary
+ */
 
 module.exports = function(string) {
 
