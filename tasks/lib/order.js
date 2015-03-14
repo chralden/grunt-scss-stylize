@@ -163,6 +163,7 @@ var order = [
         'set-link-source',
         'unicode-bidi',
         'speak',
+        '@extend',
         '@include',
         '@import',
         'query',
@@ -178,6 +179,25 @@ var order = [
         misc: 109
     };
 
+function clean(prop){
+
+    var property = {
+            cleanproperty: '',
+            comment: false
+        },
+        splitprop;
+
+    //Check property for comments
+    if(prop.indexOf('*}') !== -1){
+        splitprop = prop.split('*}');
+        property.comment = splitprop[0];
+        property.cleanproperty = splitprop[1];
+    }else{
+        property.cleanproperty = prop;
+    }
+
+    return property;
+};
 
 module.exports = function(sassObject, comments) {
 
@@ -190,10 +210,14 @@ module.exports = function(sassObject, comments) {
     function traverse(object){
 
         var ordered = [],
+            property,
             proptype,
-            style;
+            style; 
 
         for (var prop in object) {
+
+            property = clean(prop);
+
             if (object[prop] !== null && typeof(object[prop])=="object") {
                 
                 if(prop.indexOf('@media') !== -1){
@@ -204,14 +228,17 @@ module.exports = function(sassObject, comments) {
 
                 style = { 
                     property: proptype,
-                    selector: prop,
-                    value: traverse(object[prop])
+                    selector: property.cleanproperty,
+                    value: traverse(object[prop]),
+                    comment: property.comment
                 };
                 ordered.push(style);
             }else{
+
                 style = { 
-                    property: prop,
-                    value: object[prop]
+                    property: property.cleanproperty,
+                    value: object[prop],
+                    comment: property.comment
                 };
                 ordered.push(style);
             }

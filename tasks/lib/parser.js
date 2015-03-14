@@ -15,10 +15,26 @@
  * Assumes file has already been checked as valid with sass binary
  */
 
+function flagComments(declaration) {
+    var temporarydeclaration;
+
+    //Remove leading comments
+    if(declaration.indexOf("//") !== -1){
+        declaration = declaration.split('\n');
+        temporarydeclaration = '{*'+declaration[0]+'|n*}'+declaration[1].trim();
+        return temporarydeclaration;
+    }else if(declaration.indexOf("*/") !== -1){
+        declaration = declaration.split('*/');
+        temporarydeclaration = '{*'+declaration[0].replace(/\n/g, '|n')+'*/|n*}'+declaration[1].trim();
+        return temporarydeclaration;
+    }else{
+        return declaration;
+    }
+};
+
 module.exports = function(string) {
 
-    var string = string.replace(/\n/g, ""),
-        parents = [{}],
+    var parents = [{}],
         lastEnd = 0,
         ch, i;
 
@@ -33,7 +49,7 @@ module.exports = function(string) {
         //If character is opening bracket, create new sub-parent
         }else if(ch === "{"){
             var currentparent = parents[parents.length-1];
-            var parent = string.substring(lastEnd, i).trim();
+            var parent = flagComments(string.substring(lastEnd, i).trim());
             
             //Add new sub-parent to parent, and add reference in list
             currentparent[parent] = {};
@@ -44,7 +60,7 @@ module.exports = function(string) {
         //If character is semicolon, preceding substring is style declaration, add to parent
         }else if(ch === ";"){
             var currentparent = parents[parents.length-1];
-            var declaration = string.substring(lastEnd, i).trim();
+            var declaration = flagComments(string.substring(lastEnd, i).trim());
             var property, value;
 
             declaration = (declaration.indexOf(":") !== -1) ? declaration.split(":") : declaration.split(" ");

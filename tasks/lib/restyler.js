@@ -6,13 +6,24 @@
  * Licensed under the MIT license.
  */
 
-
 'use strict';
 
 var order = require('../lib/order');
+var indent = "";
+
+function writeComment(comment) {
+    var commentLines = comment.replace('{*', '').split("|n"),
+        finalcomment = "";
+
+    for(var i = 0; i < commentLines.length-1; i++){
+        finalcomment += indent + commentLines[i] + "\n";
+    }
+
+    return finalcomment;
+};
 
 module.exports = function(sassObject, options) {
-    var indent = "";
+    
     var tabSize = options.tabSize;
     var extraLine = options.extraLine;
 
@@ -20,8 +31,9 @@ module.exports = function(sassObject, options) {
         var sassString = "";
 
         object.forEach(function(element){
-            
             if(element.property === "child" || element.property === "query"){
+
+                if(element.comment) sassString += writeComment(element.comment);
 
                 //Indentation, property name and open bracket
                 sassString += indent + element.selector + " {\n";
@@ -41,9 +53,12 @@ module.exports = function(sassObject, options) {
 
                 
             }else{
+
+                if(element.comment) sassString += writeComment(element.comment);
+
                 sassString += indent + element.property;
 
-                if(element.property !== "@import" && element.property !== "@include") sassString += ":";
+                if(element.property !== "@import" && element.property !== "@include" && element.property !== "@extend") sassString += ":";
                 
                 sassString += " " + element.value + ";\n";
             }
