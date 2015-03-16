@@ -189,9 +189,10 @@ function clean(prop){
 
     //Check property for comments
     if(prop.indexOf('*}') !== -1){
+        property.comment = '';
         splitprop = prop.split('*}');
-        property.comment = splitprop[0];
-        property.cleanproperty = splitprop[1];
+        for(var i = 0; i < splitprop.length-1; i++){ property.comment += splitprop[i]; }
+        property.cleanproperty = splitprop[splitprop.length-1];
     }else{
         property.cleanproperty = prop;
     }

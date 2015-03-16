@@ -12,7 +12,7 @@ var order = require('../lib/order');
 var indent = "";
 
 function writeComment(comment) {
-    var commentLines = comment.replace('{*', '').split("|n"),
+    var commentLines = comment.replace(/\{\*/g, '').split("|n"),
         finalcomment = "";
 
     for(var i = 0; i < commentLines.length-1; i++){
@@ -67,7 +67,7 @@ module.exports = function(sassObject, options) {
         return sassString;
     }
 
-    console.log(reorder(order(sassObject, true)));
+    //console.log(reorder(order(sassObject, true)));
 
     return reorder(order(sassObject, true));
     

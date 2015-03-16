@@ -15,17 +15,22 @@
  * Assumes file has already been checked as valid with sass binary
  */
 
+function containsComment(declaration) {
+    return (declaration.indexOf("//") !== -1 || declaration.indexOf("*/") !== -1);
+};
+
 function flagComments(declaration) {
-    var temporarydeclaration;
+    var temporarydeclaration = "";
 
     //Remove leading comments
-    if(declaration.indexOf("//") !== -1){
+    if(containsComment(declaration)){
+        
         declaration = declaration.split('\n');
-        temporarydeclaration = '{*'+declaration[0]+'|n*}'+declaration[1].trim();
-        return temporarydeclaration;
-    }else if(declaration.indexOf("*/") !== -1){
-        declaration = declaration.split('*/');
-        temporarydeclaration = '{*'+declaration[0].replace(/\n/g, '|n')+'*/|n*}'+declaration[1].trim();
+        for(var i = 0; i < declaration.length-1; i++){
+            temporarydeclaration += '{*'+declaration[i].replace(/\n/g, '|n')+'|n*}';
+        }
+        temporarydeclaration += declaration[declaration.length-1].trim();
+
         return temporarydeclaration;
     }else{
         return declaration;

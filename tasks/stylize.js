@@ -49,21 +49,8 @@ module.exports = function(grunt) {
               return grunt.log.warn('You need to have Ruby and Sass installed and in your PATH for this task to work.');
             }
 
-            //Use sass process to check that file is valid 
-            var cp = spawn('sass', ['-c', src], {stdio: 'inherit'});
-
-            //Check for process error
-            cp.on('error', function (err) {
-              grunt.warn(err);
-            });
-
-
-            cp.on('close', function (code) { 
-                //If sass check fails, show error
-                if (code > 0) {
-                  return grunt.warn('Sass validation check failed with error code ' + code);
-                }
-
+            //Do not validate partials
+            if (path.basename(src)[0] === '_') { 
                 try {
                     result = stylizer.stylize(src, options);
                 } catch(e) {
@@ -71,8 +58,36 @@ module.exports = function(grunt) {
                 }
 
                 next();
-                
-            });
+            }else{
+
+                //Use sass process to check that file is valid 
+                var cp = spawn('sass', ['-c', src], {stdio: 'inherit'});
+
+                //Check for process error
+                cp.on('error', function (err) {
+                  grunt.warn(err);
+                });
+
+
+                cp.on('close', function (code) { 
+                    //If sass check fails, show error
+                    if (code > 0) {
+                      return grunt.warn('Sass validation check failed with error code ' + code);
+                    }
+
+                    try {
+                        result = stylizer.stylize(src, options);
+                    } catch(e) {
+                        grunt.log.warn(e);
+                    }
+
+                    next();
+                    
+                });
+
+            }
+
+            
 
         }, cb);
 
