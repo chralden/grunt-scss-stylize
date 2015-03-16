@@ -20,13 +20,15 @@ exports.init = function(grunt) {
 
     exports.stylize = function(file, options) {
         var output = '',
+            parsed,
             styled;
 
         options = options || {};
 
         grunt.log.writeln('Stylizing '+ file);
 
-        styled = restyler(parser(grunt.file.read(file)), options);
+        parsed = parser(grunt.file.read(file));
+        styled = restyler(parsed, options);
         
         grunt.file.write('./stylized/'+file.replace(/^.*[\\\/]/, ''), styled);
     };

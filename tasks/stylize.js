@@ -22,7 +22,7 @@ module.exports = function(grunt) {
         
         var options = this.options({
             tabSize: 4,
-            extraLine: false
+            extraLine: true
         });
 
         var cb = this.async();
@@ -86,8 +86,6 @@ module.exports = function(grunt) {
                 });
 
             }
-
-            
 
         }, cb);
 

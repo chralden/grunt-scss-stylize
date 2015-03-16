@@ -22,6 +22,21 @@ function writeComment(comment) {
     return finalcomment;
 };
 
+function formatValue(value) {
+    var values = value.split('\n'),
+        valueString = " ",
+        valindent = indent + " ";
+
+    for(var i = 0; i < values.length; i++){
+        if(i !== 0){ valueString += valindent; }
+        valueString += values[i];
+        if(i === values.length-1){ valueString += ';'; }
+        valueString += '\n';
+    }
+
+    return valueString;
+};
+
 module.exports = function(sassObject, options) {
     
     var tabSize = options.tabSize;
@@ -31,7 +46,7 @@ module.exports = function(sassObject, options) {
         var sassString = "";
 
         object.forEach(function(element){
-            if(element.property === "child" || element.property === "query"){
+            if(element.property === "child" || element.property === "query" || element.property === "fontface"){
 
                 if(element.comment) sassString += writeComment(element.comment);
 
@@ -53,21 +68,21 @@ module.exports = function(sassObject, options) {
 
                 
             }else{
-
                 if(element.comment) sassString += writeComment(element.comment);
 
                 sassString += indent + element.property;
 
                 if(element.property !== "@import" && element.property !== "@include" && element.property !== "@extend") sassString += ":";
                 
-                sassString += " " + element.value + ";\n";
+                sassString += formatValue(element.value);
+                
             }
         });
 
         return sassString;
     }
 
-    //console.log(reorder(order(sassObject, true)));
+    //console.log(order(sassObject, true));
 
     return reorder(order(sassObject, true));
     

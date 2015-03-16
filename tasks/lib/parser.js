@@ -27,6 +27,7 @@ function flagComments(declaration) {
         
         declaration = declaration.split('\n');
         for(var i = 0; i < declaration.length-1; i++){
+            if(declaration[i].indexOf("//") !== -1){ declaration[i] = declaration[i].trim(); }
             temporarydeclaration += '{*'+declaration[i].replace(/\n/g, '|n')+'|n*}';
         }
         temporarydeclaration += declaration[declaration.length-1].trim();
@@ -65,11 +66,12 @@ module.exports = function(string) {
         //If character is semicolon, preceding substring is style declaration, add to parent
         }else if(ch === ";"){
             var currentparent = parents[parents.length-1];
-            var declaration = flagComments(string.substring(lastEnd, i).trim());
+            var declaration = string.substring(lastEnd, i).trim();
             var property, value;
 
             declaration = (declaration.indexOf(":") !== -1) ? declaration.split(":") : declaration.split(" ");
-            property = declaration[0].trim();
+            
+            property = flagComments(declaration[0].trim());
             value = declaration[1].trim();
             
             //If property does not already exist, add it
