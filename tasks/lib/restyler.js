@@ -9,81 +9,165 @@
 'use strict';
 
 var order = require('../lib/order');
-var indent = "";
+var indent = '';
 
-function writeComment(comment) {
-    var commentLines = comment.replace(/\{\*/g, '').split("|n"),
-        finalcomment = "";
+function isOneLine(element) {
+    var oneline = false,
+        children = element.value;
 
-    for(var i = 0; i < commentLines.length-1; i++){
-        finalcomment += indent + commentLines[i] + "\n";
+    //Declaration should be one line if single child that has no children of its own and is not comment
+    if(children.length === 1 && children[0].property !== 'child' && children[0].property !== 'query' && !children[0].comment){
+        oneline = true;
     }
 
-    return finalcomment;
+    return oneline;
 };
 
-function formatValue(value) {
-    var values = value.split('\n'),
-        valueString = " ",
-        valindent = indent + " ";
+function isBasicProperty(string) {
+    var isBasic = true,
+        sassDeclarations = ['@import', '@include', '@extend'];
 
-    for(var i = 0; i < values.length; i++){
-        if(i !== 0){ valueString += valindent; }
-        valueString += values[i];
-        if(i === values.length-1){ valueString += ';'; }
-        valueString += '\n';
+    sassDeclarations.map(function(declaration){
+        if(string === declaration || string.indexOf(declaration) !== -1) isBasic = false;
+    });
+
+    return isBasic;
+}
+
+var formatter = {
+    tabSize: 4,
+    extraLine: false,
+
+    //Format comment string
+    writeComment: function(element, oneline) {
+        var commentLines = element.comment.replace(/\{\*/g, '').split('|n'),
+            finalcomment = '';
+
+        for(var i = 0; i < commentLines.length-1; i++){
+            finalcomment += indent + commentLines[i];
+            if(!element.property && isBasicProperty(commentLines[i])) finalcomment += ':';
+            if(element.property && element.selector){ finalcomment += '\n'; }
+        }
+
+        return finalcomment;
+    },
+
+    //Format end bracket
+    closeBracket: function(selector, oneline) {
+        var closing = '';
+        
+        if(selector){
+            if(selector.indexOf('//') !== -1){
+                if(!oneline) closing += '//';
+                closing += '}\n';
+            }else if(selector.indexOf('/*') !== -1){
+                closing += '}*/\n';
+            }else{
+                closing += '}\n';
+            }  
+        }else{
+            if(!oneline) closing += '//';
+            closing += '}\n';
+        }
+          
+        if(this.extraLine && !oneline) closing += '\n';
+        return closing;
+    },
+
+    //Format selector string
+    formatSelector: function(element, oneline) {
+        var selectorString = '',
+            startIndent = indent;
+
+        if(element.comment) selectorString += this.writeComment(element, oneline);
+
+        //Indentation, property name and open bracket
+        selectorString += indent + element.selector + ' {';
+
+        if(!oneline) selectorString += '\n';
+        
+        //Increase indentation by tab size if selector present and not multiline comment
+        if(element.selector) for(var i = 0; i < this.tabSize; i++){ indent += ' '; }
+        
+        //Recurse through children
+        selectorString += reorder(element.value, oneline);
+
+        //Reduce indentation by tab size
+        indent = indent.slice(0, indent.length-this.tabSize);
+
+        //Indentation and closeing bracket
+        if(!oneline) selectorString += startIndent;
+        selectorString += this.closeBracket(element.selector, oneline);
+
+        return selectorString;
+    },
+
+    //Format style property string
+    formatProperty: function(element, oneline) {
+        var propertyString = '';
+
+        if(element.comment) propertyString += this.writeComment(element, oneline);
+
+        if(!oneline && element.property){
+            propertyString += indent;
+        }else if(element.property){
+            propertyString += ' ';
+        }
+        propertyString += element.property;
+
+        if(element.property && isBasicProperty(element.property)) propertyString += ':';
+        return propertyString;
+    },
+
+    //Format value string
+    formatValue: function(value, oneline) {
+        var values = value.split('\n'),
+            valueString = ' ',
+            valindent = indent + ' ';
+
+        for(var i = 0; i < values.length; i++){
+            if(i !== 0){ valueString += valindent; }
+
+            valueString += values[i];
+            
+            if(i === values.length-1){ valueString += ';'; }
+            
+            if(!oneline){
+                valueString += '\n';
+            }else{
+                valueString += ' ';
+            }
+        }
+
+        return valueString;
     }
+};
 
-    return valueString;
+//Traverse ordered sass object and return formatted string
+function reorder(object, oneline) {
+    var sassString = '';
+
+    object.forEach(function(element) {
+
+        if(element.property === 'child' || element.property === 'query' || element.property === 'fontface'){
+            sassString += formatter.formatSelector(element, isOneLine(element));
+        }else{
+
+            sassString += formatter.formatProperty(element, oneline);
+            sassString += formatter.formatValue(element.value, oneline);
+        }
+    });
+
+    return sassString;
 };
 
 module.exports = function(sassObject, options) {
     
-    var tabSize = options.tabSize;
-    var extraLine = options.extraLine;
+    var ordered = order(sassObject, true);
 
-    function reorder(object) {
-        var sassString = "";
+    formatter.tabSize = options.tabSize;
+    formatter.extraLine = options.extraLine;
 
-        object.forEach(function(element){
-            if(element.property === "child" || element.property === "query" || element.property === "fontface"){
-
-                if(element.comment) sassString += writeComment(element.comment);
-
-                //Indentation, property name and open bracket
-                sassString += indent + element.selector + " {\n";
-                
-                //Increase indentation by tab size
-                for(var i = 0; i < tabSize; i++){ indent += " "; }
-                
-                //Recurse through children
-                sassString += reorder(element.value);
-
-                //Reduce indentation by tab size
-                indent = indent.slice(0, indent.length-tabSize);
-
-                //Indentation and closeing bracket
-                sassString += indent + "}\n";
-                if(extraLine) sassString += "\n";
-
-                
-            }else{
-                if(element.comment) sassString += writeComment(element.comment);
-
-                sassString += indent + element.property;
-
-                if(element.property !== "@import" && element.property !== "@include" && element.property !== "@extend") sassString += ":";
-                
-                sassString += formatValue(element.value);
-                
-            }
-        });
-
-        return sassString;
-    }
-
-    //console.log(order(sassObject, true));
-
-    return reorder(order(sassObject, true));
+    return reorder(ordered);
     
 };

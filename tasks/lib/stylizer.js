@@ -31,6 +31,7 @@ exports.init = function(grunt) {
         styled = restyler(parsed, options);
         
         grunt.file.write('./stylized/'+file.replace(/^.*[\\\/]/, ''), styled);
+        //grunt.file.write(file, styled);
     };
 
     return exports;

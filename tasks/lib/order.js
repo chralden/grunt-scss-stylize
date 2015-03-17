@@ -181,13 +181,12 @@ var order = [
     };
 
 function clean(prop){
-
     var property = {
             cleanproperty: '',
             comment: false
         },
         splitprop;
-
+    
     //Check property for comments
     if(prop.indexOf('*}') !== -1){
         property.comment = '';
@@ -229,8 +228,6 @@ module.exports = function(sassObject, comments) {
 
             property = clean(prop);
 
-            //console.log(property);
-
             if (object[prop] !== null && typeof(object[prop])=="object" && !Array.isArray(object[prop])) {
                 
                 if(prop.indexOf('@media') !== -1){
@@ -265,6 +262,7 @@ module.exports = function(sassObject, comments) {
 
                 style = { 
                     property: property.cleanproperty,
+                    selector: 'style',
                     value: object[prop],
                     comment: property.comment,
                     id: objectID

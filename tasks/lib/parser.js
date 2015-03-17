@@ -19,23 +19,39 @@ function containsComment(declaration) {
     return (declaration.indexOf("//") !== -1 || declaration.indexOf("*/") !== -1);
 };
 
+function flag(comment) {
+    return '{*'+comment.replace(/\n/g, '|n')+'|n*}';
+};
+
 function flagComments(declaration) {
-    var temporarydeclaration = "";
+    var temporarydeclaration = "",
+        commentTerminated = (declaration.indexOf("/*") === -1);
 
     //Remove leading comments
     if(containsComment(declaration)){
         
         declaration = declaration.split('\n');
-        for(var i = 0; i < declaration.length-1; i++){
-            if(declaration[i].indexOf("//") !== -1){ declaration[i] = declaration[i].trim(); }
-            temporarydeclaration += '{*'+declaration[i].replace(/\n/g, '|n')+'|n*}';
-        }
-        temporarydeclaration += declaration[declaration.length-1].trim();
+        for(var i = 0; i < declaration.length; i++){
+            
+            if(commentTerminated){
+                if(declaration[i].indexOf("//") !== -1){
+                    declaration[i] = declaration[i].trim();
+                    temporarydeclaration += flag(declaration[i]);
+                }else{
+                    temporarydeclaration += declaration[i].trim();
+                }
+            }else{
+                temporarydeclaration += flag(declaration[i]);
 
+                if(declaration[i].indexOf('*/') !== -1) commentTerminated = true;
+            }
+
+        }
         return temporarydeclaration;
     }else{
         return declaration;
     }
+
 };
 
 module.exports = function(string) {
@@ -58,7 +74,7 @@ module.exports = function(string) {
             var parent = flagComments(string.substring(lastEnd, i).trim());
             
             //Add new sub-parent to parent, and add reference in list
-            currentparent[parent] = {};
+            if(!currentparent[parent]) currentparent[parent] = {};
             parents.push(currentparent[parent]); 
 
             lastEnd = i+1;
@@ -69,11 +85,19 @@ module.exports = function(string) {
             var declaration = string.substring(lastEnd, i).trim();
             var property, value;
 
-            declaration = (declaration.indexOf(":") !== -1) ? declaration.split(":") : declaration.split(" ");
-            
-            property = flagComments(declaration[0].trim());
-            value = declaration[1].trim();
-            
+            //If not @ declaration, split based on :
+            if(declaration.indexOf("@") === -1){
+                declaration = declaration.split(":");
+
+            //Else calculate the index of the @ property
+            }else{
+                var splitindex = declaration.indexOf("@") + declaration.split("@")[1].indexOf(" ") + 1;
+                declaration = [declaration.substring(0, splitindex), declaration.substring(splitindex)];
+            }
+
+            property = flagComments(declaration.shift().trim());
+            value = declaration.join(':').trim();
+
             //If property does not already exist, add it
             if(!currentparent[property]){
                 currentparent[property] = value;
