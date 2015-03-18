@@ -77,12 +77,20 @@ var formatter = {
     //Format selector string
     formatSelector: function(element, oneline) {
         var selectorString = '',
-            startIndent = indent;
+            startIndent = indent,
+            selectorLines;
 
         if(element.comment) selectorString += this.writeComment(element, oneline);
 
         //Indentation, property name and open bracket
-        selectorString += indent + element.selector + ' {';
+        selectorLines = element.selector.split('\n');
+        for(var i = 0; i < selectorLines.length; i++){
+            selectorString += indent + selectorLines[i].trim();
+            if(i < selectorLines.length-1) selectorString += '\n';
+        }
+        
+
+        selectorString += ' {';
 
         if(!oneline) selectorString += '\n';
         

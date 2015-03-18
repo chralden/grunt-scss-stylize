@@ -13,6 +13,10 @@
 var order = [
     'fontface',
 
+    '@extend',
+    '@include',
+    '@import',
+
     /* Positioning */
     'position',
     'top',
@@ -170,9 +174,6 @@ var order = [
     'set-link-source',
     'unicode-bidi',
     'speak',
-    '@extend',
-    '@include',
-    '@import',
     'query',
     'child'
 ];
@@ -208,10 +209,14 @@ exports.sortProps = function(unorderedObject) {
     var objectID = 0;
 
     var compareProperties = function(a, b){
-        var aVal = (order.indexOf(a.property) !== -1 || a.property.indexOf('$') === 0) ? order.indexOf(a.property) : order.length;
-        var bVal = (order.indexOf(b.property) !== -1 || b.property.indexOf('$') === 0) ? order.indexOf(b.property) : order.length;
+        var aVal = (order.indexOf(a.property) !== -1 || a.property.indexOf('$') === 0) ? order.indexOf(a.property) : order.length,
+            bVal = (order.indexOf(b.property) !== -1 || b.property.indexOf('$') === 0) ? order.indexOf(b.property) : order.length,
+            
+            //If styles alter same root style, maintain order
+            sharestyle = ((b.property.indexOf(a.property) !== -1) || (a.property.indexOf(b.property) !== -1));
 
-        if(aVal !== bVal){
+
+        if(aVal !== bVal && !sharestyle){
             return  aVal - bVal;
         }else{
             return parseInt(a.id) - parseInt(b.id);
