@@ -1,8 +1,8 @@
 /*
- * grunt-contrib-concat
- * http://gruntjs.com/
+ * grunt-scss-stylize
+ * https://github.com/chralden/grunt-scss-stylize
  *
- * Copyright (c) 2012 "Cowboy" Ben Alman, contributors
+ * Copyright (c) 2014 Chris Alden, contributors
  * Licensed under the MIT license.
  */
 
@@ -16,7 +16,9 @@ module.exports = function(grunt) {
     sassStylize: { 
       target: {
         files: [{
-          src: ['tests/*.scss']
+          expand: true,
+          src: ['tests/*.scss'], 
+          dest: 'build/scss/'
         }]
       }
     }

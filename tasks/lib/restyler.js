@@ -1,6 +1,6 @@
 /*
- * grunt-sass-stylize
- * https://github.com/chralden/grunt-sass-stylize
+ * grunt-scss-stylize
+ * https://github.com/chralden/grunt-scss-stylize
  *
  * Copyright (c) 2014 Chris Alden, contributors
  * Licensed under the MIT license.
@@ -163,7 +163,7 @@ function reorder(object, oneline) {
 
 module.exports = function(sassObject, options) {
     
-    var ordered = order(sassObject, true);
+    var ordered = order.sortProps(sassObject);
 
     formatter.tabSize = options.tabSize;
     formatter.extraLine = options.extraLine;

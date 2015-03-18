@@ -1,11 +1,10 @@
 /*
- * grunt-sass-stylize
- * https://github.com/chralden/grunt-sass-stylize
+ * grunt-scss-stylize
+ * https://github.com/chralden/grunt-scss-stylize
  *
  * Copyright (c) 2014 Chris Alden, contributors
  * Licensed under the MIT license.
  */
-
 
 'use strict';
 
@@ -18,10 +17,9 @@ exports.init = function(grunt) {
 
     var exports = {};
 
-    exports.stylize = function(file, options) {
+    exports.stylize = function(file, dest, options) {
         var output = '',
-            parsed,
-            styled;
+            dest, parsed, styled;
 
         options = options || {};
 
@@ -30,8 +28,8 @@ exports.init = function(grunt) {
         parsed = parser(grunt.file.read(file));
         styled = restyler(parsed, options);
         
-        grunt.file.write('./stylized/'+file.replace(/^.*[\\\/]/, ''), styled);
-        //grunt.file.write(file, styled);
+        grunt.file.write(dest, styled);
+
     };
 
     return exports;

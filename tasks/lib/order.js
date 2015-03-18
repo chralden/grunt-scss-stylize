@@ -1,6 +1,6 @@
 /*
- * grunt-sass-stylize
- * https://github.com/chralden/grunt-sass-stylize
+ * grunt-scss-stylize
+ * https://github.com/chralden/grunt-scss-stylize
  *
  * Copyright (c) 2014 Chris Alden, contributors
  * Licensed under the MIT license.
@@ -12,14 +12,16 @@
 /*Recess Style property ordering*/
 var order = [
     'fontface',
-    '/* Positioning */',
+
+    /* Positioning */
     'position',
     'top',
     'right',
     'bottom',
     'left',
     'z-index',
-    '/* Box-model */',
+
+    /* Box-model */
     'display',
     'float',
     'width',
@@ -48,7 +50,8 @@ var order = [
     'overflow-y',
     'clip',
     'clear',
-    '/* Typography */',
+
+    /* Typography */
     'font',
     'font-family',
     'font-size',
@@ -78,10 +81,12 @@ var order = [
     'list-style-type',
     'list-style-position',
     'list-style-image',
-    '/* Cursor */',
+
+    /* Cursor */
     'pointer-events',
     'cursor',
-    '/* Visual */',
+
+    /* Visual */
     'background',
     'background-attachment',
     'background-color',
@@ -121,7 +126,8 @@ var order = [
     'border-radius-bottomright',
     'border-radius-bottomleft',
     'border-radius-topleft',
-    '/* Misc */',
+
+    /* Misc */
     'content',
     'quotes',
     'outline',
@@ -169,18 +175,9 @@ var order = [
     '@import',
     'query',
     'child'
-    ],
+];
 
-    typeIndeces = {
-        positioning: 0,
-        boxmodel: 7,
-        typography: 36,
-        cursor: 66,
-        visual: 69,
-        misc: 109
-    };
-
-function clean(prop){
+var clean = function(prop){
     var property = {
             cleanproperty: '',
             comment: false
@@ -200,12 +197,17 @@ function clean(prop){
     return property;
 };
 
-module.exports = function(sassObject, comments) {
+//Overwrite default order array with user provided array
+exports.applyUserOrder = function(userorder){
+    if(userorder) order = userorder;
+};
+
+exports.sortProps = function(unorderedObject) {
     
     //Iterate over numeric ID to maintain object order when properties have equal precedence
     var objectID = 0;
 
-    function compareProperties(a, b){
+    var compareProperties = function(a, b){
         var aVal = (order.indexOf(a.property) !== -1 || a.property.indexOf('$') === 0) ? order.indexOf(a.property) : order.length;
         var bVal = (order.indexOf(b.property) !== -1 || b.property.indexOf('$') === 0) ? order.indexOf(b.property) : order.length;
 
@@ -277,6 +279,6 @@ module.exports = function(sassObject, comments) {
 
     }
 
-    return traverse(sassObject);
+    return traverse(unorderedObject);
 
 };

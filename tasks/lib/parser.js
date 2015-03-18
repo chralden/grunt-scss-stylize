@@ -1,6 +1,6 @@
 /*
- * grunt-sass-stylize
- * https://github.com/chralden/grunt-sass-stylize
+ * grunt-scss-stylize
+ * https://github.com/chralden/grunt-scss-stylize
  *
  * Copyright (c) 2014 Chris Alden, contributors
  * Licensed under the MIT license.
@@ -9,24 +9,18 @@
 
 'use strict';
 
-/*
- * Naive sass parser
- * Converts sass string to JSON object
- * Assumes file has already been checked as valid with sass binary
- */
-
 //Check if declaration string contains comment indicators
-function containsComment(declaration) {
+var containsComment = function(declaration) {
     return (declaration.indexOf("//") !== -1 || declaration.indexOf("*/") !== -1);
 };
 
 //Add flags around comment string
-function flag(comment) {
+var flag = function(comment) {
     return '{*'+comment.replace(/\n/g, '|n')+'|n*}';
 };
 
 //Search declaration string for comment indicators and flag them if present
-function flagComments(declaration) {
+var flagComments = function(declaration) {
     var temporarydeclaration = "",
         commentTerminated = (declaration.indexOf("/*") === -1);
 
@@ -57,18 +51,27 @@ function flagComments(declaration) {
 
 };
 
-var parser = {
+/*
+ * Naive sass parser
+ * Converts sass string to JSON object
+ * Assumes file has already been checked as valid with sass binary
+ */
+var Parser = function(string){
 
     //Array to hold selectors
-    parents: [{}],
+    this.parents = [{}];
 
     //Track indeces as we walk the string
-    lastIndex: 0,
-    currentIndex: 0,
+    this.lastIndex = 0;
+    this.currentIndex = 0;
 
     //Hold the current character and the full string to parse
-    currentCharacter: '',
-    parseString: '',
+    this.currentCharacter = '';
+    this.parseString = string || '';
+};
+
+Parser.prototype = {
+    constructor: Parser,
 
     //Add a parent selector
     addParent: function() {
@@ -126,9 +129,7 @@ var parser = {
     },
 
     //Walk through parse string character by character
-    walkString: function(string) {
-
-        this.parseString = string;
+    walkString: function() {
 
         for(this.currentIndex = 0; this.currentIndex < this.parseString.length; this.currentIndex++){
             
@@ -158,9 +159,9 @@ var parser = {
 
         return this.parents.pop();
     }
-
 };
 
 module.exports = function(string) {
-    return parser.walkString(string);
+    var parser = new Parser(string);
+    return parser.walkString();
 };
