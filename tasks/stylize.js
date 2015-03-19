@@ -35,7 +35,7 @@ module.exports = function(grunt) {
 			 }
 		 };
 
-		grunt.registerMultiTask('sassStylize', 'Compile sass files to conform to RECESS styleguide.', function() {
+		grunt.registerMultiTask('stylizeSCSS', 'Compile sass files to conform to RECESS styleguide.', function() {
 				
 				var options = this.options({
 								tabSize: 4,

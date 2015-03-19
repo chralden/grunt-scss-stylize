@@ -88,7 +88,6 @@ var formatter = {
             selectorString += indent + selectorLines[i].trim();
             if(i < selectorLines.length-1) selectorString += '\n';
         }
-        
 
         selectorString += ' {';
 

@@ -13,7 +13,7 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
     
-    sassStylize: { 
+    stylizeSCSS: { 
       target: {
         files: [{
           expand: true,
@@ -29,6 +29,6 @@ module.exports = function(grunt) {
   grunt.loadTasks('tasks');
 
   // By default, lint and run all tests.
-  grunt.registerTask('default', ['sassStylize']);
+  grunt.registerTask('default', ['stylizeSCSS']);
 
 };
