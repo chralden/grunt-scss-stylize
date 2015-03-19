@@ -6,7 +6,7 @@
 ## Stylizer task
 _Run this task with the `grunt stylizeSCSS` command._
 
-This task parses files that use the SCSS syntax and generates reformatted files with uniform indentation and strictly ordered properties following [RECESS](https://github.com/twitter/recess)-like property precedence.
+This task parses files that use the [SCSS](http://sass-lang.com/documentation/file.SCSS_FOR_SASS_USERS.html) syntax and generates reformatted files with uniform indentation and strictly ordered properties following [RECESS](https://github.com/twitter/recess)-like property precedence.
 
 This task requires you to have [Ruby](http://www.ruby-lang.org/en/downloads/) and [Sass](http://sass-lang.com/download.html) installed in order to validate your SCSS files before reformatting is performed.
 
@@ -72,7 +72,7 @@ grunt.initConfig({
     target: {
       files: [{
         expand: true,
-        src: ['raw/*.scss']
+        src: ['frontend/*.scss']
       }]
     }
   }
@@ -101,7 +101,7 @@ grunt.initConfig({
 
       files: [{
         expand: true,
-        src: ['raw/*.scss']
+        src: ['frontend/*.scss']
       }]
     }
   }
