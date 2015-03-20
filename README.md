@@ -32,7 +32,7 @@ Add a new line at the end of every multi-line selector.
 Type: `Boolean`  
 Default: `true`
 
-Write selectors with only a single property onto one line.
+Write selectors with only a single property to one line.
 
 #### order
 
