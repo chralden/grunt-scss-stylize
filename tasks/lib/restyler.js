@@ -177,7 +177,7 @@ module.exports = function(sassObject, options) {
     
     formatter.tabSize = options.tabSize;
     formatter.extraLine = options.extraLine;
-    formatter.oneLine = options.oneline;
+    formatter.oneLine = options.oneLine;
 
     return reorder(ordered);
     
