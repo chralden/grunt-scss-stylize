@@ -172,7 +172,7 @@ var reorder = function(object, oneline) {
 
 module.exports = function(sassObject, options) {
     
-    var ordered = order.sortProps(sassObject);
+    var ordered = order.sortProps(sassObject, options.padPrefixes);
 
     
     formatter.tabSize = options.tabSize;
