@@ -34,6 +34,13 @@ Default: `true`
 
 Write selectors with only a single property to one line.
 
+#### padPrefixes
+
+Type: `Boolean`  
+Default: `false`
+
+Add leading space to vendor prefix properties.
+
 #### order
 
 Type: `Array`  

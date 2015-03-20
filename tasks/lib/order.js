@@ -198,12 +198,51 @@ var clean = function(prop){
     return property;
 };
 
+var addPrefixPadding = function(styles) {
+    var vendorPrefixes = [
+            '-webkit-',
+            '-khtml-',
+            '-epub-',
+            '-moz-',
+            '-ms-',
+            '-o-'
+        ],
+        VENDOR_PREFIX = new RegExp('^(' + vendorPrefixes.join('|').replace(/[-[\]{}()*+?.,\\^$#\s]/g, "\\$&") + ')'),
+        prefixRoots = [];
+
+    //Find prefix roots first
+    styles.forEach(function(style) {
+        var property = style.property;
+        if(property.match(VENDOR_PREFIX) && prefixRoots.indexOf(property.replace(VENDOR_PREFIX,'')) === -1){
+            prefixRoots.push(property.replace(VENDOR_PREFIX,''));
+        }
+    });
+
+    //If there are prefix roots, pad out the prefixes
+    if(prefixRoots.length > 0){
+        styles.map(function(style) {
+            var property = style.property,
+                prefix = property.match(VENDOR_PREFIX),
+                paddedProperty = '';
+
+            if(prefix){
+                for(var i = 0; i < vendorPrefixes.indexOf(prefix[0]); i++)  paddedProperty += ' ';
+                style.property = paddedProperty+property;
+            }else{
+                if(prefixRoots.indexOf(property) !== -1) style.property = '        '+property;
+            }   
+        });
+    }
+    
+    return styles;
+};
+
 //Overwrite default order array with user provided array
 exports.applyUserOrder = function(userorder){
     if(userorder) order = userorder;
 };
 
-exports.sortProps = function(unorderedObject) {
+exports.sortProps = function(unorderedObject, padPrefixes) {
     
     //Iterate over numeric ID to maintain object order when properties have equal precedence
     var objectID = 0;
@@ -248,7 +287,7 @@ exports.sortProps = function(unorderedObject) {
                 style = { 
                     property: proptype,
                     selector: property.cleanproperty,
-                    value: traverse(object[prop]),
+                    value: (padPrefixes) ? addPrefixPadding(traverse(object[prop])) : traverse(object[prop]),
                     comment: property.comment,
                     id: objectID
                 };

@@ -40,7 +40,8 @@ module.exports = function(grunt) {
 		var options = this.options({
 				tabSize: 4,
 				extraLine: true,
-				oneLine: true
+				oneLine: true,
+				padPrefixes: false
 			}),
 			src;
 
