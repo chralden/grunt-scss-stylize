@@ -27,6 +27,13 @@ Default: `true`
 
 Add a new line at the end of every multi-line selector.
 
+#### oneLine
+
+Type: `Boolean`  
+Default: `true`
+
+Write selectors with only a single property to one line.
+
 #### order
 
 Type: `Array`  
