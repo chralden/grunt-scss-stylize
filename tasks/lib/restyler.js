@@ -11,7 +11,7 @@
 var order = require('../lib/order');
 var indent = '';
 
-function isOneLine(element) {
+var isOneLine = function(element) {
     var oneline = false,
         children = element.value;
 
@@ -23,16 +23,16 @@ function isOneLine(element) {
     return oneline;
 };
 
-function isBasicProperty(string) {
+var isBasicProperty = function(string) {
     var isBasic = true,
-        sassDeclarations = ['@import', '@include', '@extend'];
+        sassDeclarations = ['@import', '@include', '@extend', '@function', '@return'];
 
     sassDeclarations.map(function(declaration){
         if(string === declaration || string.indexOf(declaration) !== -1) isBasic = false;
     });
 
     return isBasic;
-}
+};
 
 var formatter = {
     tabSize: 4,
@@ -151,7 +151,7 @@ var formatter = {
 };
 
 //Traverse ordered sass object and return formatted string
-function reorder(object, oneline) {
+var reorder = function(object, oneline) {
     var sassString = '';
 
     object.forEach(function(element) {
