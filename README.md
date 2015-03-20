@@ -57,12 +57,12 @@ Pre-stylized SCSS:
 
 ```css
 .parent {
-position: relative;
 height: 400px;
+position: relative;
 font-size: 24px;
   .child {
-      float: left;
       margin-right: 20px;
+      float: left;
   }
   a {
     color: #FF0000;
