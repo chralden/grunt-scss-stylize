@@ -15,6 +15,8 @@ var isOneLine = function(element) {
     var oneline = false,
         children = element.value;
 
+    if(!formatter.oneLine) return false;
+
     //Declaration should be one line if single child that has no children of its own and is not comment
     if(children.length === 1 && children[0].property !== 'child' && children[0].property !== 'query' && !children[0].comment){
         oneline = true;
@@ -172,8 +174,10 @@ module.exports = function(sassObject, options) {
     
     var ordered = order.sortProps(sassObject);
 
+    
     formatter.tabSize = options.tabSize;
     formatter.extraLine = options.extraLine;
+    formatter.oneLine = options.oneline;
 
     return reorder(ordered);
     
