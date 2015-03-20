@@ -41,7 +41,7 @@ var formatter = {
     extraLine: false,
 
     //Format comment string
-    writeComment: function(element, oneline) {
+    writeComment: function(element) {
         var commentLines = element.comment.replace(/\{\*/g, '').split('|n'),
             finalcomment = '';
 
@@ -66,7 +66,7 @@ var formatter = {
                 closing += '}*/\n';
             }else{
                 closing += '}\n';
-            }  
+            }
         }else{
             if(!oneline) closing += '//';
             closing += '}\n';
@@ -80,13 +80,13 @@ var formatter = {
     formatSelector: function(element, oneline) {
         var selectorString = '',
             startIndent = indent,
-            selectorLines;
+            selectorLines, i;
 
-        if(element.comment) selectorString += this.writeComment(element, oneline);
+        if(element.comment) selectorString += this.writeComment(element);
 
         //Indentation, property name and open bracket
         selectorLines = element.selector.split('\n');
-        for(var i = 0; i < selectorLines.length; i++){
+        for(i = 0; i < selectorLines.length; i++){
             selectorString += indent + selectorLines[i].trim();
             if(i < selectorLines.length-1) selectorString += '\n';
         }
@@ -96,7 +96,7 @@ var formatter = {
         if(!oneline) selectorString += '\n';
         
         //Increase indentation by tab size if selector present and not multiline comment
-        if(element.selector) for(var i = 0; i < this.tabSize; i++){ indent += ' '; }
+        if(element.selector) for(i = 0; i < this.tabSize; i++){ indent += ' '; }
         
         //Recurse through children
         selectorString += reorder(element.value, oneline);

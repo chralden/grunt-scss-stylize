@@ -90,7 +90,7 @@ Parser.prototype = {
         
         //Add new sub-parent to parent, and add reference in list
         if(!currentparent[parent]) currentparent[parent] = {};
-        this.parents.push(currentparent[parent]); 
+        this.parents.push(currentparent[parent]);
     },
 
     //Add a style declaration to parent selector

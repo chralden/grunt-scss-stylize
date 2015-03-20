@@ -230,7 +230,7 @@ var addPrefixPadding = function(styles) {
                 style.property = paddedProperty+property;
             }else{
                 if(prefixRoots.indexOf(property) !== -1) style.property = '        '+property;
-            }   
+            }
         });
     }
     
@@ -258,7 +258,7 @@ exports.sortProps = function(unorderedObject, padPrefixes) {
         if(aVal !== bVal && !sharestyle){
             return  aVal - bVal;
         }else{
-            return parseInt(a.id) - parseInt(b.id);
+            return parseInt(a.id, 10) - parseInt(b.id, 10);
         }
         
     };
@@ -268,7 +268,7 @@ exports.sortProps = function(unorderedObject, padPrefixes) {
         var ordered = [],
             property,
             proptype,
-            style; 
+            style;
 
         for (var prop in object) {
 
@@ -284,7 +284,7 @@ exports.sortProps = function(unorderedObject, padPrefixes) {
                     proptype = 'child';
                 }
 
-                style = { 
+                style = {
                     property: proptype,
                     selector: property.cleanproperty,
                     value: (padPrefixes) ? addPrefixPadding(traverse(object[prop])) : traverse(object[prop]),
@@ -295,7 +295,7 @@ exports.sortProps = function(unorderedObject, padPrefixes) {
             }else if(Array.isArray(object[prop])){
 
                 for(var i = 0; i < object[prop].length; i++){
-                    style = { 
+                    style = {
                         property: property.cleanproperty,
                         value: object[prop][i],
                         comment: property.comment,
@@ -306,7 +306,7 @@ exports.sortProps = function(unorderedObject, padPrefixes) {
 
             }else{
 
-                style = { 
+                style = {
                     property: property.cleanproperty,
                     selector: 'style',
                     value: object[prop],

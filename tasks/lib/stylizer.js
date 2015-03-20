@@ -8,8 +8,6 @@
 
 'use strict';
 
-var path = require('path');
-var fs = require('fs');
 var parser = require('../lib/parser');
 var restyler = require('../lib/restyler');
 
@@ -18,8 +16,7 @@ exports.init = function(grunt) {
     var exports = {};
 
     exports.stylize = function(file, dest, options) {
-        var output = '',
-            dest, parsed, styled;
+        var parsed, styled;
 
         options = options || {};
 

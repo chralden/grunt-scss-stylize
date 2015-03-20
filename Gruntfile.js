@@ -21,14 +21,24 @@ module.exports = function(grunt) {
           dest: 'build/scss/'
         }]
       }
-    }
+    },
+
+    // Run JS Linter
+    jshint: {
+      options: {
+        jshintrc: 'jshintrc.json'
+      },
+      all: ['tasks/**/*.js']
+    },
 
   });
+
+  grunt.loadNpmTasks('grunt-contrib-jshint');
 
   // Actually load this plugin's task(s).
   grunt.loadTasks('tasks');
 
-  // By default, lint and run all tests.
   grunt.registerTask('default', ['stylizeSCSS']);
+  grunt.registerTask('lint', ['jshint']);
 
 };

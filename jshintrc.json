@@ -1,0 +1,9 @@
+{
+    "node": true,
+    "undef": true,
+    "unused": true,
+    "indent": 4,
+    "strict": true,
+    "trailing": true,
+    "plusplus": false
+}

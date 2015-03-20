@@ -42,8 +42,7 @@ module.exports = function(grunt) {
 				extraLine: true,
 				oneLine: true,
 				padPrefixes: false
-			}),
-			src;
+			});
 
 		if(options.order){
 			if(Array.isArray(options.order)){
@@ -51,7 +50,7 @@ module.exports = function(grunt) {
 			}else{
 				grunt.log.warn('User order not applied, order option must be an array.');
 			}
-		} 
+		}
 
 		var cb = this.async();
 
@@ -76,7 +75,7 @@ module.exports = function(grunt) {
 				if (!grunt.file.exists(src)) {
 					grunt.log.warn('Source file ' + src + ' not found.');
 					return false;
-				} 
+				}
 
 				//If file is empty show warning
 				if (src.length === 0) {
@@ -92,11 +91,11 @@ module.exports = function(grunt) {
 				}
 
 				//Do not validate partials
-				if (path.basename(src)[0] === '_') { 
+				if (path.basename(src)[0] === '_') {
 					try {
-							result = stylizer.stylize(src, dest, options);
+						result = stylizer.stylize(src, dest, options);
 					} catch(e) {
-							grunt.log.warn(e);
+						grunt.log.warn(e);
 					}
 				}else{
 
@@ -109,17 +108,17 @@ module.exports = function(grunt) {
 					});
 
 
-					cp.on('close', function (code) { 
-							//If sass check fails, show error
-							if (code > 0) {
-								return grunt.warn('Sass validation check failed with error code ' + code);
-							}
+					cp.on('close', function (code) {
+						//If sass check fails, show error
+						if (code > 0) {
+							return grunt.warn('Sass validation check failed with error code ' + code);
+						}
 
-							try {
-									result = stylizer.stylize(src, dest, options);
-							} catch(e) {
-									grunt.log.warn(e);
-							}
+						try {
+							result = stylizer.stylize(src, dest, options);
+						} catch(e) {
+							grunt.log.warn(e);
+						}
 					});
 				}
 
