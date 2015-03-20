@@ -51,6 +51,65 @@ An array of Strings that represent CSS property precedence. Providing a custom o
 
 ### Examples
 
+#### The basics
+
+Pre-stylized SCSS:
+
+```css
+.parent {
+position: relative;
+height: 400px;
+font-size: 24px;
+  .child {
+      float: left;
+      margin-right: 20px;
+  }
+  a {
+    color: #FF0000;
+  }
+}
+
+```
+
+Stylized with default options
+
+```javascript
+grunt.initConfig({
+  
+  stylizeSCSS: { 
+    target: {
+      files: [{
+        expand: true,
+        src: ['frontend/*.scss']
+      }]
+    }
+  }
+
+});
+
+grunt.loadNpmTasks('grunt-scss-stylize');
+
+grunt.registerTask('default', ['stylizeSCSS']);
+```
+
+Produces stylized output:
+
+```css
+.parent {
+    position: relative;
+    height: 400px;
+    font-size: 24px;
+    .child {
+        float: left;
+        margin-right: 20px;
+    }
+
+    a { color: #FF0000; }
+}
+
+```
+
+
 #### Write stylized files to a directory
 
 If you provide a `dest` directory the stylized files will be written to that directory, leaving your source files untouched.
