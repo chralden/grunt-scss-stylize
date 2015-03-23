@@ -26,14 +26,9 @@ var isOneLine = function(element) {
 };
 
 var isBasicProperty = function(string) {
-    var isBasic = true,
-        sassDeclarations = ['@import', '@include', '@extend', '@function', '@return'];
+    var sassDeclarations = /^@(import|include|extend|function|return)/i;
 
-    sassDeclarations.map(function(declaration){
-        if(string === declaration || string.indexOf(declaration) !== -1) isBasic = false;
-    });
-
-    return isBasic;
+    return !sassDeclarations.test(string);
 };
 
 //Traverse ordered sass object and return formatted string

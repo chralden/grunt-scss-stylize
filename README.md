@@ -11,7 +11,7 @@ Install this plugin with this command:
 npm install grunt-scss-stylize --save-dev
 ```
 
-Once the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:
+Once the plugin has been installed, it can be enabled inside your Gruntfile with this line of JavaScript:
 
 ```js
 grunt.loadNpmTasks('grunt-scss-stylize');
