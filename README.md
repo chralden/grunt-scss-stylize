@@ -2,6 +2,19 @@
 
 > Reformat and reorder SCSS files to conform to a basic styleguide.
 
+## Getting Started
+This plugin requires Grunt `>=0.4.0`
+
+
+```shell
+npm install grunt-scss-stylize --save-dev
+```
+
+Once the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:
+
+```js
+grunt.loadNpmTasks('grunt-scss-stylize');
+```
 
 ## Stylizer task
 _Run this task with the `grunt stylizeSCSS` command._
