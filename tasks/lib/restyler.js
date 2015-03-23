@@ -36,6 +36,24 @@ var isBasicProperty = function(string) {
     return isBasic;
 };
 
+//Traverse ordered sass object and return formatted string
+var reorder = function(object, oneline) {
+    var sassString = '';
+
+    object.forEach(function(element) {
+
+        if(element.property === 'child' || element.property === 'query' || element.property === 'fontface'){
+            sassString += formatter.formatSelector(element, isOneLine(element));
+        }else{
+
+            sassString += formatter.formatProperty(element, oneline);
+            sassString += formatter.formatValue(element.value, oneline);
+        }
+    });
+
+    return sassString;
+};
+
 var formatter = {
     tabSize: 4,
     extraLine: false,
@@ -45,6 +63,7 @@ var formatter = {
         var commentLines = element.comment.replace(/\{\*/g, '').split('|n'),
             finalcomment = '';
 
+        console.log(element);
         for(var i = 0; i < commentLines.length-1; i++){
             finalcomment += indent + commentLines[i];
             if(!element.property && isBasicProperty(commentLines[i])) finalcomment += ':';
@@ -150,24 +169,6 @@ var formatter = {
 
         return valueString;
     }
-};
-
-//Traverse ordered sass object and return formatted string
-var reorder = function(object, oneline) {
-    var sassString = '';
-
-    object.forEach(function(element) {
-
-        if(element.property === 'child' || element.property === 'query' || element.property === 'fontface'){
-            sassString += formatter.formatSelector(element, isOneLine(element));
-        }else{
-
-            sassString += formatter.formatProperty(element, oneline);
-            sassString += formatter.formatValue(element.value, oneline);
-        }
-    });
-
-    return sassString;
 };
 
 module.exports = function(sassObject, options) {
