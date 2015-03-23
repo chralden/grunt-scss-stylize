@@ -5,6 +5,7 @@
 ## Getting Started
 This plugin requires Grunt `>=0.4.0`
 
+Install this plugin with this command:
 
 ```shell
 npm install grunt-scss-stylize --save-dev
