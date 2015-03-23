@@ -1,6 +1,6 @@
 {
-  "name": "grunt-sass-stylize",
-  "description": "Compile sass files to conform to styleguide.",
+  "name": "grunt-scss-stylize",
+  "description": "Compile scss files to conform to styleguide.",
   "version": "0.0.1",
   "homepage": "",
   "author": {
@@ -9,23 +9,21 @@
   },
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/chralden/grunt-scss-stylize"
   },
   "bugs": {
-    "url": ""
+    "url": "https://github.com/chralden/grunt-scss-stylize/issues"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": ""
+      "url": "https://github.com/chralden/grunt-scss-stylize/blob/master/LICENSE-MIT"
     }
   ],
   "engines": {
     "node": ">= 0.8.0"
   },
-  "scripts": {
-    "test": "grunt test"
-  },
+
   "dependencies": {
     "async": "^0.9.0",
     "win-spawn": "^2.0.0",
@@ -33,19 +31,16 @@
   },
   "devDependencies": {
     "grunt": "~0.4.3",
-    "grunt-contrib-clean": "~0.4.0",
-    "grunt-contrib-jshint": "~0.6.0",
-    "grunt-contrib-nodeunit": "~0.2.0"
+    "grunt-contrib-jshint": "~0.6.0"
   },
   "peerDependencies": {
     "grunt": "~0.4.3"
   },
   "keywords": [
     "gruntplugin",
-    "sass",
     "scss",
     "style",
     "format",
-    "syntax"
+    "reorder"
   ]
 }
