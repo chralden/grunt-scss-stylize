@@ -15,7 +15,7 @@ var isOneLine = function(element) {
     var oneline = false,
         children = element.value;
 
-    if(!formatter.oneLine) return false;
+    if(!formatter.options.oneLine) return false;
 
     //Declaration should be one line if single child that has no children of its own and is not comment
     if(children.length === 1 && children[0].property !== 'child' && children[0].property !== 'query' && !children[0].comment){
@@ -55,15 +55,12 @@ var reorder = function(object, oneline) {
 };
 
 var formatter = {
-    tabSize: 4,
-    extraLine: false,
 
     //Format comment string
     writeComment: function(element) {
         var commentLines = element.comment.replace(/\{\*/g, '').split('|n'),
             finalcomment = '';
 
-        console.log(element);
         for(var i = 0; i < commentLines.length-1; i++){
             finalcomment += indent + commentLines[i];
             if(!element.property && isBasicProperty(commentLines[i])) finalcomment += ':';
@@ -91,7 +88,7 @@ var formatter = {
             closing += '}\n';
         }
           
-        if(this.extraLine && !oneline) closing += '\n';
+        if(this.options.extraLine && !oneline) closing += '\n';
         return closing;
     },
 
@@ -115,13 +112,13 @@ var formatter = {
         if(!oneline) selectorString += '\n';
         
         //Increase indentation by tab size if selector present and not multiline comment
-        if(element.selector) for(i = 0; i < this.tabSize; i++){ indent += ' '; }
+        if(element.selector) for(i = 0; i < this.options.tabSize; i++){ indent += ' '; }
         
         //Recurse through children
         selectorString += reorder(element.value, oneline);
 
         //Reduce indentation by tab size
-        indent = indent.slice(0, indent.length-this.tabSize);
+        if(element.selector) indent = indent.slice(0, indent.length-this.options.tabSize);
 
         //Indentation and closeing bracket
         if(!oneline) selectorString += startIndent;
@@ -141,6 +138,7 @@ var formatter = {
         }else if(element.property){
             propertyString += ' ';
         }
+
         propertyString += element.property;
 
         if(element.property && isBasicProperty(element.property)) propertyString += ':';
@@ -154,11 +152,11 @@ var formatter = {
             valindent = indent + ' ';
 
         for(var i = 0; i < values.length; i++){
-            if(i !== 0){ valueString += valindent; }
+            if(i !== 0) valueString += valindent;
 
             valueString += values[i];
             
-            if(i === values.length-1){ valueString += ';'; }
+            if(i === values.length-1) valueString += ';';
             
             if(!oneline){
                 valueString += '\n';
@@ -174,11 +172,8 @@ var formatter = {
 module.exports = function(sassObject, options) {
     
     var ordered = order.sortProps(sassObject, options.padPrefixes);
-
     
-    formatter.tabSize = options.tabSize;
-    formatter.extraLine = options.extraLine;
-    formatter.oneLine = options.oneLine;
+    formatter.options = options;
 
     return reorder(ordered);
     
