@@ -27,7 +27,6 @@ var isOneLine = function(element) {
 
 var isBasicProperty = function(string) {
     var sassDeclarations = /^@(import|include|extend|function|return)/i;
-
     return !sassDeclarations.test(string);
 };
 

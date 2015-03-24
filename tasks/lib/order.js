@@ -263,7 +263,7 @@ exports.sortProps = function(unorderedObject, padPrefixes) {
         
     };
     
-    function traverse(object){
+    var traverse = function traverse(object){
 
         var ordered = [],
             property,
@@ -274,7 +274,7 @@ exports.sortProps = function(unorderedObject, padPrefixes) {
 
             property = clean(prop);
 
-            if (object[prop] !== null && typeof(object[prop])=="object" && !Array.isArray(object[prop])) {
+            if (object[prop] !== null && typeof(object[prop]) == "object" && !Array.isArray(object[prop])) {
                 
                 if(prop.indexOf('@media') !== -1){
                     proptype = 'query';
@@ -291,12 +291,15 @@ exports.sortProps = function(unorderedObject, padPrefixes) {
                     comment: property.comment,
                     id: objectID
                 };
+
                 ordered.push(style);
+
             }else if(Array.isArray(object[prop])){
 
                 for(var i = 0; i < object[prop].length; i++){
                     style = {
                         property: property.cleanproperty,
+                        selector: 'style',
                         value: object[prop][i],
                         comment: property.comment,
                         id: objectID
@@ -321,7 +324,7 @@ exports.sortProps = function(unorderedObject, padPrefixes) {
 
         return ordered.sort(compareProperties);
 
-    }
+    };
 
     return traverse(unorderedObject);
 
