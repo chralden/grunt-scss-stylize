@@ -63,7 +63,7 @@ var processFiles = function(grunt, filePair, options) {
 		if (path.basename(src)[0] !== '_') {
 
 			//Use sass process to check that file is valid 
-			var cp = spawn('sass', ['-c', src], {stdio: 'inherit'});
+			var cp = spawn('sass', ['-c', '--scss', src], {stdio: 'inherit'});
 
 			//Check for process error
 			cp.on('error', function (err) {
