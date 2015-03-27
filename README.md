@@ -55,6 +55,13 @@ Default: `false`
 
 Add leading space to vendor prefix properties.
 
+#### cleanDecimals
+
+Type: `Boolean`  
+Default: `false`
+
+Clean decimal values to add leading zeros to values less than one and remove trailing zeros.
+
 #### order
 
 Type: `Array`  

@@ -86,14 +86,14 @@ var processFiles = function(grunt, filePair, options) {
 
 	//Parse the file, reorder, then write to destination
 	var stylize = function(file, dest) {
-		var parser = require('./lib/parser'),
-			restyler = require('./lib/restyler'),
+		var parse = require('./lib/parse'),
+			restyle = require('./lib/restyle'),
 			parsed, styled;
 
 		grunt.log.writeln('Stylizing '+ file);
 
-		parsed = parser(grunt.file.read(file));
-		styled = restyler(parsed, options);
+		parsed = parse(grunt.file.read(file));
+		styled = restyle(parsed, options);
 		
 		grunt.file.write(dest, styled);
 	};
@@ -129,7 +129,8 @@ module.exports = function(grunt) {
 				tabSize: 4,
 				extraLine: true,
 				oneLine: true,
-				padPrefixes: false
+				padPrefixes: false,
+				cleanDecimals: false
 			});
 
 		if(options.order){
