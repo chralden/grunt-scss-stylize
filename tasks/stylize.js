@@ -130,7 +130,8 @@ module.exports = function(grunt) {
 				extraLine: true,
 				oneLine: true,
 				padPrefixes: false,
-				cleanDecimals: false
+				cleanDecimals: false,
+				cleanZeros: false
 			});
 
 		if(options.order){

@@ -62,6 +62,13 @@ Default: `false`
 
 Clean decimal values to add leading zeros to values less than one and remove trailing zeros.
 
+#### cleanZeros
+
+Type: `Boolean`  
+Default: `false`
+
+Remove units from values equal to zero.
+
 #### order
 
 Type: `Array`  
