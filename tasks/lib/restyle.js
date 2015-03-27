@@ -9,6 +9,7 @@
 'use strict';
 
 var order = require('../lib/order');
+var normalize = require('../lib/normalize');
 var indent = '';
 
 var isOneLine = function(element) {
@@ -143,12 +144,15 @@ var formatter = {
     formatValue: function(value, oneline) {
         var values = value.split('\n'),
             valueString = ' ',
-            valindent = indent + ' ';
+            valindent = indent + ' ',
+            thisValue;
 
         for(var i = 0; i < values.length; i++){
             if(i !== 0) valueString += valindent;
 
-            valueString += values[i];
+            thisValue = normalize(values[i], formatter.options);
+
+            valueString += thisValue;
             
             if(i === values.length-1) valueString += ';';
             
