@@ -85,7 +85,7 @@ var processFiles = function(grunt, filePair, options) {
 	};
 
 	//Parse the file, reorder, then write to destination
-	var stylize = function(file, dest) {
+	var stylize = function(file, dest, next) {
 		var parse = require('./lib/parse'),
 			restyle = require('./lib/restyle'),
 			parsed, styled;
@@ -96,10 +96,11 @@ var processFiles = function(grunt, filePair, options) {
 		styled = restyle(parsed, options);
 		
 		grunt.file.write(dest, styled);
+		next();
 	};
 
 	//For each source in the filepair, validate and style
-	async.eachLimit(filePair.src, numCPUs, function (src) {
+	async.eachLimit(filePair.src, numCPUs, function (src, next) {
 		
 		var result;
 
@@ -112,12 +113,14 @@ var processFiles = function(grunt, filePair, options) {
 
 		validate(src, function(){
 			try {
-				result = stylize(src, dest);
+				result = stylize(src, dest, next);
 			} catch(e) {
 				grunt.log.warn(e);
+				next();
 			}
 		});
 		
+
 	}, cb);
 };
 
