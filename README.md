@@ -74,7 +74,7 @@ Remove units from values equal to zero.
 Type: `Array`  
 Default: `null`
 
-An array of Strings that represent CSS property precedence. Providing a custom order will overwrite the default [RECESS property order](https://github.com/twitter/recess/blob/master/lib/lint/strict-property-order.js) and any properties not contained in the custom order will maintain their relative position within file. 
+An array of Strings that represent CSS property precedence. Providing a custom order will overwrite the [default order](#default-order) and any properties not contained in the custom order will maintain their relative position within file. 
 
 
 ### Examples
@@ -212,4 +212,40 @@ grunt.initConfig({
 grunt.loadNpmTasks('grunt-scss-stylize');
 
 grunt.registerTask('default', ['stylizeSCSS']);
+```
+
+#### Default order <a name="default-order"></a>
+
+The default order wraps sass specific properties around the [RECESS property order](https://github.com/twitter/recess/blob/master/lib/lint/strict-property-order.js), followed by media queries and nested declarations:
+
+```javascript
+  var order = [
+      'fontface',
+
+      '@extend',
+      '@include',
+      '@import',
+
+      /* Positioning */
+      ...
+
+      /* Box-model */
+      ...
+
+      /* Typography */
+      ...
+
+      /* Cursor */
+      ...
+
+      /* Visual */
+      ...
+
+      /* Misc */
+      ...
+
+      'query',
+      'child'
+  ];
+
 ```

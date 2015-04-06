@@ -1,7 +1,7 @@
 {
   "name": "grunt-scss-stylize",
   "description": "Compile scss files to conform to styleguide.",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "homepage": "",
   "author": {
     "name": "Chris Alden",
