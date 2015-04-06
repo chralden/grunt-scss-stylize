@@ -15,11 +15,7 @@ module.exports = function(grunt) {
     
     stylizeSCSS: { 
       target: {
-        files: [{
-          expand: true,
-          src: ['tests/*.scss'], 
-          dest: 'build/scss/'
-        }]
+        files: [{expand: true, flatten: true, src: ['tests/input/*.scss'], dest: 'tests/output', filter: 'isFile'}]
       }
     },
 
@@ -38,7 +34,9 @@ module.exports = function(grunt) {
   // Actually load this plugin's task(s).
   grunt.loadTasks('tasks');
 
-  grunt.registerTask('default', ['stylizeSCSS']);
+  grunt.registerTask('test', ['stylizeSCSS']);
   grunt.registerTask('lint', ['jshint']);
+  grunt.registerTask('default', ['lint','test']);
+  
 
 };
