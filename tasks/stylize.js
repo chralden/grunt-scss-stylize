@@ -13,7 +13,10 @@ var spawn = require('win-spawn');
 var which = require('which');
 var numCPUs = require('os').cpus().length || 1;
 var async = require('async');
+<<<<<<< HEAD
+=======
 var order = require('./lib/order');
+>>>>>>> master
 
 //Keep running count of processed files for async execution
 var processCount = 0;
@@ -142,9 +145,12 @@ module.exports = function(grunt) {
 				oneLine: true,
 				padPrefixes: false,
 				cleanDecimals: false,
-				cleanZeros: false
+				cleanZeros: false,
+				order: null
 			});
 
+<<<<<<< HEAD
+=======
 		if(options.order){
 			if(Array.isArray(options.order)){
 				order.applyUserOrder(options.order);
@@ -153,6 +159,7 @@ module.exports = function(grunt) {
 			}
 		}
 
+>>>>>>> master
 		//Create task callback
 		cb = this.async();
 

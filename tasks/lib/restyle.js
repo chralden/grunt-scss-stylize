@@ -169,7 +169,7 @@ var formatter = {
 
 module.exports = function(sassObject, options) {
     
-    var ordered = order.sortProps(sassObject, options.padPrefixes);
+    var ordered = order.sortProps(sassObject, options);
     
     formatter.options = options;
 

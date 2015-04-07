@@ -9,8 +9,10 @@
 
 'use strict';
 
+var grunt = require('grunt');
+
 /*Recess Style property ordering*/
-var order = [
+var defaultOrder = [
     'fontface',
 
     '@extend',
@@ -237,15 +239,21 @@ var addPrefixPadding = function(styles) {
     return styles;
 };
 
-//Overwrite default order array with user provided array
-exports.applyUserOrder = function(userorder){
-    if(userorder) order = userorder;
-};
+exports.sortProps = function(unorderedObject, options) {
 
-exports.sortProps = function(unorderedObject, padPrefixes) {
-    
     //Iterate over numeric ID to maintain object order when properties have equal precedence
-    var objectID = 0;
+    var objectID = 0,
+        order;
+
+    if(options.order){
+        if(Array.isArray(options.order)){
+            order = options.order;
+        }else{
+            grunt.log.warn('User order not applied, order option must be an array.');
+        }
+    }else{
+        order = defaultOrder;
+    }
 
     var compareProperties = function(a, b){
         var aVal = (order.indexOf(a.property) !== -1 || a.property.indexOf('$') === 0) ? order.indexOf(a.property) : order.length,
@@ -287,7 +295,7 @@ exports.sortProps = function(unorderedObject, padPrefixes) {
                 style = {
                     property: proptype,
                     selector: property.cleanproperty,
-                    value: (padPrefixes) ? addPrefixPadding(traverse(object[prop])) : traverse(object[prop]),
+                    value: (options.padPrefixes) ? addPrefixPadding(traverse(object[prop])) : traverse(object[prop]),
                     comment: property.comment,
                     id: objectID
                 };
