@@ -13,7 +13,10 @@ var spawn = require('win-spawn');
 var which = require('which');
 var numCPUs = require('os').cpus().length || 1;
 var async = require('async');
-var order = require('./lib/order');
+
+//Keep running count of processed files for async execution
+var processCount = 0;
+var processLength = 0;
 var cb;
 
 var processFiles = function(grunt, filePair, options) {
@@ -85,7 +88,7 @@ var processFiles = function(grunt, filePair, options) {
 	};
 
 	//Parse the file, reorder, then write to destination
-	var stylize = function(file, dest, next) {
+	var stylize = function(file, dest) {
 		var parse = require('./lib/parse'),
 			restyle = require('./lib/restyle'),
 			parsed, styled;
@@ -96,11 +99,16 @@ var processFiles = function(grunt, filePair, options) {
 		styled = restyle(parsed, options);
 		
 		grunt.file.write(dest, styled);
-		next();
+		
+		//Tick the count of successfully processed files
+		processCount++;
+
+		//If all files have been processed, execute task callback
+		if(processCount >= processLength) cb();
 	};
 
 	//For each source in the filepair, validate and style
-	async.eachLimit(filePair.src, numCPUs, function (src, next) {
+	async.eachLimit(filePair.src, numCPUs, function (src) {
 		
 		var result;
 
@@ -113,15 +121,14 @@ var processFiles = function(grunt, filePair, options) {
 
 		validate(src, function(){
 			try {
-				result = stylize(src, dest, next);
+				result = stylize(src, dest);
 			} catch(e) {
 				grunt.log.warn(e);
-				next();
 			}
-		});
-		
 
-	}, cb);
+		});
+				
+	});
 };
 
 module.exports = function(grunt) {
@@ -134,24 +141,19 @@ module.exports = function(grunt) {
 				oneLine: true,
 				padPrefixes: false,
 				cleanDecimals: false,
-				cleanZeros: false
+				cleanZeros: false,
+				order: null
 			});
 
-		if(options.order){
-			if(Array.isArray(options.order)){
-				order.applyUserOrder(options.order);
-			}else{
-				grunt.log.warn('User order not applied, order option must be an array.');
-			}
-		}
-
+		//Create task callback
 		cb = this.async();
+
+		//Store total number of files that need to be processed
+		processLength = this.files.length;
 
 		//For each src/dest pair validate then stylize
 		this.files.forEach(function(filePair){
-
 			processFiles(grunt, filePair, options);
-
 		});
 	});
 };

@@ -1,0 +1,12 @@
+.test {
+  position: relative;
+  float: left;
+  padding: 10.0px;
+  font-size: 12px;
+  background: #000;
+  border-radius: 1px solid #FFF;
+  opacity: .75;
+  .child {
+    display: none;
+  }
+}
