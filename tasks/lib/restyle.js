@@ -35,10 +35,9 @@ var isBasicProperty = function(string) {
 var reorder = function(object, oneline) {
     var sassString = '';
 
-    object.forEach(function(element) {
-
+    object.forEach(function(element, index) {
         if(element.property === 'child' || element.property === 'query' || element.property === 'fontface'){
-            sassString += formatter.formatSelector(element, isOneLine(element));
+            sassString += formatter.formatSelector(element, isOneLine(element), (index === object.length-1));
         }else{
 
             sassString += formatter.formatProperty(element, oneline);
@@ -66,29 +65,31 @@ var formatter = {
     },
 
     //Format end bracket
-    closeBracket: function(selector, oneline) {
+    closeBracket: function(selector, oneline, last) {
         var closing = '';
         
         if(selector){
             if(selector.indexOf('//') !== -1){
                 if(!oneline) closing += '//';
-                closing += '}\n';
+                closing += '}';
             }else if(selector.indexOf('/*') !== -1){
-                closing += '}*/\n';
+                closing += '}*/';
             }else{
-                closing += '}\n';
+                closing += '}';
             }
+            closing += '\n';
         }else{
             if(!oneline) closing += '//';
-            closing += '}\n';
+            closing += '}';
+            closing += '\n';
         }
           
-        if(this.options.extraLine && !oneline) closing += '\n';
+        if(this.options.extraLine && !oneline && !last) closing += '\n';
         return closing;
     },
 
     //Format selector string
-    formatSelector: function(element, oneline) {
+    formatSelector: function(element, oneline, last) {
         var selectorString = '',
             startIndent = indent,
             selectorLines, i;
@@ -117,7 +118,7 @@ var formatter = {
 
         //Indentation and closeing bracket
         if(!oneline) selectorString += startIndent;
-        selectorString += this.closeBracket(element.selector, oneline);
+        selectorString += this.closeBracket(element.selector, oneline, last);
 
         return selectorString;
     },
@@ -173,6 +174,6 @@ module.exports = function(sassObject, options) {
     
     formatter.options = options;
 
-    return reorder(ordered);
+    return reorder(ordered).trim();
     
 };
