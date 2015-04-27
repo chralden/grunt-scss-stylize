@@ -142,6 +142,7 @@ module.exports = function(grunt) {
 				padPrefixes: false,
 				cleanDecimals: false,
 				cleanZeros: false,
+				alphabetizeProps: false,
 				order: null
 			});
 

@@ -45,5 +45,15 @@ exports.stylize = {
     test.equal(actual, expected, 'Custom spacing options not reflected.');
 
     test.done();
+  },
+
+  alphabetical_order: function(test) {
+    test.expect(1);
+
+    var actual = getNormalizedFile('tests/output/alphabetical-order.scss');
+    var expected = getNormalizedFile('tests/expected/alphabetical-order.scss');
+    test.equal(actual, expected, 'Alphabetical property order not reflected.');
+
+    test.done();
   }
 };

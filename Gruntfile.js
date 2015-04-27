@@ -40,6 +40,13 @@ module.exports = function(grunt) {
           cleanZeros: true
         },
         files: [{src: ['tests/input/test.scss'], dest: 'tests/output/numeric-options.scss', filter: 'isFile'}]
+      },
+
+      alphabetical_order: {
+        options: {
+          alphabetizeProps: true
+        },
+        files: [{src: ['tests/input/test.scss'], dest: 'tests/output/alphabetical-order.scss', filter: 'isFile'}]
       }
     },
 
