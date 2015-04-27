@@ -69,6 +69,13 @@ Default: `false`
 
 Remove units from values equal to zero.
 
+#### alphabetizeProps
+
+Type: `Boolean`  
+Default: `false`
+
+Override default property precedence with properties ordered alphabetically. This is the only built in ordering alternative, since alphabetical order is a common alternative to RECESS style property grouping.
+
 #### order
 
 Type: `Array`  

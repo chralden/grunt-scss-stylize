@@ -1,7 +1,7 @@
 {
   "name": "grunt-scss-stylize",
   "description": "Compile scss files to conform to styleguide.",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "homepage": "",
   "author": {
     "name": "Chris Alden",
@@ -44,6 +44,6 @@
     "format"
   ],
   "readmeFilename": "README.md",
-  "_id": "grunt-scss-stylize@0.4.0",
-  "_from": "grunt-scss-stylize@~0.4.0"
+  "_id": "grunt-scss-stylize@0.5.0",
+  "_from": "grunt-scss-stylize@~0.5.0"
 }

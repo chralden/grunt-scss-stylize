@@ -12,13 +12,8 @@
 var grunt = require('grunt');
 
 /*Recess Style property ordering*/
-var defaultOrder = [
-    'fontface',
-
-    '@extend',
-    '@include',
-    '@import',
-
+var baseProps = [
+    
     /* Positioning */
     'position',
     'top',
@@ -176,9 +171,10 @@ var defaultOrder = [
     'set-link-source',
     'unicode-bidi',
     'speak',
-    'query',
-    'child'
 ];
+
+var leadProps = ['fontface','@extend','@include','@import'];
+var tailProps = ['query','child'];
 
 var clean = function(prop){
     var property = {
@@ -245,14 +241,21 @@ exports.sortProps = function(unorderedObject, options) {
     var objectID = 0,
         order;
 
+    //If custom property order specified apply that order
     if(options.order){
         if(Array.isArray(options.order)){
-            order = options.order;
+            order = leadProps.concat(options.order).concat(tailProps);
         }else{
             grunt.log.warn('User order not applied, order option must be an array.');
         }
+
+    //Alphabetize if set
+    }else if(options.alphabetizeProps){
+        order = leadProps.concat(baseProps.slice().sort()).concat(tailProps);
+    
+    //Otherwise apply default ordering
     }else{
-        order = defaultOrder;
+        order = leadProps.concat(baseProps).concat(tailProps);
     }
 
     var compareProperties = function(a, b){
